@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import HtmlJsPlayground from './HtmlJsPlayground.jsx'
+import PromptMaestro from './PromptMaestro.jsx'
 
 const pages = {
   home: 'home',
@@ -9,8 +10,7 @@ const pages = {
   dosAndDonts: 'dosAndDonts',
   whatsNext: 'whatsNext',
   playground: 'playground',
-  more1: 'more1',
-  more2: 'more2',
+  maestro: 'maestro',
   more3: 'more3',
   more4: 'more4',
   more5: 'more5',
@@ -57,8 +57,16 @@ function App() {
             <HtmlJsPlayground />
           </section>
         )
-      case pages.more1:
-      case pages.more2:
+      case pages.maestro:
+        return (
+          <section className="page">
+            <h1>Prompt Maestro</h1>
+            <p>
+              Give the Maestro some coding prompts and let it give you feedback! Learn how to make your prompts clearer, more concise, and more effective.
+            </p>
+            <PromptMaestro />
+          </section>
+        )
       case pages.more3:
       case pages.more4:
       case pages.more5:
@@ -217,9 +225,9 @@ function App() {
             </p>
             <ul>
               <li>According to <a href="#" target="_blank" rel="noopener noreferrer">various sources</a>, over 75% of professional developers use AI coding assistants in their workflows</li>
-              <li>This is a graph of the amount of test cases passed by Al coding tools for logical and intensive programming problems, taken from over a year ago. The development of these have only rapidly progressed since then.</li>
+              {/* <li>This is a graph of the amount of test cases passed by Al coding tools for logical and intensive programming problems, taken from over a year ago. The development of these have only rapidly progressed since then.</li> */}
               <li>Companies like Oracle are integrating Al tools into their development workflows, and even incentivizing their usage.</li>
-              <li>TODO: Build more evidence here (replace old graph)</li>
+              {/* <li>TODO: Build more evidence here (replace old graph)</li> */}
             </ul>
             <p>
               If you're here, you're probably considering using these tools for yourself. Becoming an expert on these tools isn't the easiest. However, using these tools isn't just about productivity, it's about comfort. In the next page, we'll discuss several <button className="inline-link" onClick={() => setCurrentPage(pages.uses)}><b>use cases</b></button>, where you can pick and choose which methods you like best!
@@ -299,7 +307,7 @@ function App() {
             <button
               className={
                 currentPage === pages.playground ||
-                currentPage === pages.more2 ||
+                currentPage === pages.maestro ||
                 currentPage === pages.more3 ||
                 currentPage === pages.more4 ||
                 currentPage === pages.more5
@@ -322,15 +330,15 @@ function App() {
                   HTML &amp; JS Playground
                 </button>
                 <button
-                  className={currentPage === pages.more2 ? 'nav-more-item active' : 'nav-more-item'}
+                  className={currentPage === pages.maestro ? 'nav-more-item active' : 'nav-more-item'}
                   onClick={() => {
-                    setCurrentPage(pages.more2)
+                    setCurrentPage(pages.maestro)
                     setIsMoreOpen(false)
                   }}
                 >
-                  Placeholder 2
+                  Prompt Maestro
                 </button>
-                <button
+                {/* <button
                   className={currentPage === pages.more3 ? 'nav-more-item active' : 'nav-more-item'}
                   onClick={() => {
                     setCurrentPage(pages.more3)
@@ -356,7 +364,7 @@ function App() {
                   }}
                 >
                   Placeholder 5
-                </button>
+                </button> */}
               </div>
             )}
           </div>
