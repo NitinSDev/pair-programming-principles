@@ -17,7 +17,7 @@ function PromptMaestro() {
     setAnalysis(null)
 
     try {
-      const response = await fetch('http://localhost:3001/api/analyze-prompt', {
+      const response = await fetch('/.netlify/functions/analyze-prompt', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ function PromptMaestro() {
 
       setAnalysis(data.analysis)
     } catch (err) {
-      setError(err.message || 'Error analyzing prompt. Make sure the backend server is running on port 3001.')
+      setError(err.message || 'Error analyzing prompt. Please try again.')
     } finally {
       setLoading(false)
     }
