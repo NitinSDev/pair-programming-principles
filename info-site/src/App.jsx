@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import HtmlJsPlayground from './HtmlJsPlayground.jsx'
 import PromptMaestro from './PromptMaestro.jsx'
+import devLogo from './assets/Dev.png'
 
 const pages = {
   home: 'home',
@@ -22,8 +23,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState(pages.home)
   const [isGuideOpen, setIsGuideOpen] = useState(false)
   const [isMoreOpen, setIsMoreOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const guideRef = useRef(null)
   const toolsRef = useRef(null)
+  const mobileMenuRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -33,16 +36,19 @@ function App() {
       if (toolsRef.current && !toolsRef.current.contains(event.target)) {
         setIsMoreOpen(false)
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false)
+      }
     }
 
-    if (isGuideOpen || isMoreOpen) {
+    if (isGuideOpen || isMoreOpen || isMobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isGuideOpen, isMoreOpen])
+  }, [isGuideOpen, isMoreOpen, isMobileMenuOpen])
 
   const renderPage = () => {
     switch (currentPage) {
@@ -172,9 +178,36 @@ function App() {
           <section className="page">
             <h1>Getting Started</h1>
             <p>
-              Use this page to help visitors get oriented quickly. Add a short checklist, first steps,
-              or links to the most important sections of your site.
+              There are a ton of ways to integrate AI tools into your Workspace/IDE. There are three "levels" of integration, and your choice between them is completely up to you.
             </p>
+            
+            <h2>Level 1: Chat app/browser tab</h2>
+            <p>
+              Many LLMs and GenAI tools are available for developers, and many of them reside in their own web domains or applications.
+            </p>
+            <ul>
+              <li>Some examples of these are <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer">chatgpt.com</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">claude.ai</a>, <a href="https://replit.com" target="_blank" rel="noopener noreferrer">repl.it</a>*, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">gemini.google.com</a>, etc.</li>
+              <li>*<a href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a> is also a web-based IDE on its own, but its chatbot is reliable for programming questions and understanding.</li>
+              <li>Usually best for quick and simple tasks where you can copy and paste code snippets from the browser into the IDE.</li>
+            </ul>
+
+            <h2>Level 2: IDE Plugins/Extensions</h2>
+            <p>
+              Most modern development environments have built-in or installable tools that implement popular AI tools like <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude Haiku</a>, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a>, and more. These extensions often let you choose what models to use as well, with some being free and some being subscription-based.
+            </p>
+            <ul>
+              <li>Let you code in a familiar IDE while having a sidebar for Agent assistance, and integrate seamlessly with development.</li>
+              <li><a href="https://visualstudio.microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft's Visual Studio</a> is one of the most modular and customizable development platforms for integrating AI tools.</li>
+            </ul>
+
+            <h2>Level 3: Dedicated Development Application</h2>
+            <p>
+              Some high-power AI programming agents provide their own IDEs for users to program in with complete integration.
+            </p>
+            <ul>
+              <li>The leading example of this is <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer">Cursor</a>, which is a fork of VS Code with deeply embedded AI functionality.</li>
+              <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude code</a>'s desktop environment, <a href="https://www.cognition-labs.com/devin" target="_blank" rel="noopener noreferrer">Devin</a>, and <a href="https://windsurf.ai" target="_blank" rel="noopener noreferrer">Windsurf by Codeium</a> are also examples of AI integration at this level.</li>
+            </ul>
           </section>
         )
       case pages.dosAndDonts:
@@ -200,8 +233,7 @@ function App() {
           <section className="page">
             <h1>About</h1>
             <p>
-              Describe who you are, your background, and the purpose of this site. You can add a short
-              bio, your goals, or any context that helps visitors understand what they’re looking at.
+              My name is Nitin Sathish, and I created Dev X AI because I noticed one problem holding countless developers back: the fear of AI. The computer science industry is shrinking in many ways, and people are quick to blame it on AI. What they fail to realize is that while AI can be a huge risk to developers who don't know how to use it, it can also be an invaluable tool to those who can balance it and master it. This webpage serves as a tool to get more developers acquainted with the benefits AI programming provides, and how they can use it safely and securely.
             </p>
           </section>
         )
@@ -240,11 +272,34 @@ function App() {
   return (
     <div className="app">
       <header className="site-header">
-        <div className="logo-text">Dev &#215; AI - The Guide to Programming Aith AI</div>
-        <nav className="nav-bar">
+        <div className="logo-container">
+          <img src={devLogo} alt="Dev × AI Logo" className="logo-image" />
+          <div className="logo-text">Dev &#215; AI - The Guide to Programming Aith AI</div>
+        </div>
+        <button 
+          className="mobile-menu-toggle"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className={isMobileMenuOpen ? 'hamburger open' : 'hamburger'}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+        {isMobileMenuOpen && (
+          <div 
+            className="mobile-menu-backdrop"
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+        )}
+        <nav className={`nav-bar ${isMobileMenuOpen ? 'mobile-open' : ''}`} ref={mobileMenuRef}>
           <button
             className={currentPage === pages.home ? 'nav-link active' : 'nav-link'}
-            onClick={() => setCurrentPage(pages.home)}
+            onClick={() => {
+              setCurrentPage(pages.home)
+              setIsMobileMenuOpen(false)
+            }}
           >
             Home
           </button>
@@ -269,6 +324,7 @@ function App() {
                   onClick={() => {
                     setCurrentPage(pages.uses)
                     setIsGuideOpen(false)
+                    setIsMobileMenuOpen(false)
                   }}
                 >
                   Uses
@@ -278,6 +334,7 @@ function App() {
                   onClick={() => {
                     setCurrentPage(pages.gettingStarted)
                     setIsGuideOpen(false)
+                    setIsMobileMenuOpen(false)
                   }}
                 >
                   Getting Started
@@ -287,6 +344,7 @@ function App() {
                   onClick={() => {
                     setCurrentPage(pages.dosAndDonts)
                     setIsGuideOpen(false)
+                    setIsMobileMenuOpen(false)
                   }}
                 >
                   Dos &amp; Don'ts
@@ -296,6 +354,7 @@ function App() {
                   onClick={() => {
                     setCurrentPage(pages.whatsNext)
                     setIsGuideOpen(false)
+                    setIsMobileMenuOpen(false)
                   }}
                 >
                   What's Next?
@@ -325,6 +384,7 @@ function App() {
                   onClick={() => {
                     setCurrentPage(pages.playground)
                     setIsMoreOpen(false)
+                    setIsMobileMenuOpen(false)
                   }}
                 >
                   HTML &amp; JS Playground
@@ -334,6 +394,7 @@ function App() {
                   onClick={() => {
                     setCurrentPage(pages.maestro)
                     setIsMoreOpen(false)
+                    setIsMobileMenuOpen(false)
                   }}
                 >
                   Prompt Maestro
@@ -370,13 +431,19 @@ function App() {
           </div>
           <button
             className={currentPage === pages.about ? 'nav-link active' : 'nav-link'}
-            onClick={() => setCurrentPage(pages.about)}
+            onClick={() => {
+              setCurrentPage(pages.about)
+              setIsMobileMenuOpen(false)
+            }}
           >
             About
           </button>
           <button
             className={currentPage === pages.references ? 'nav-link active' : 'nav-link'}
-            onClick={() => setCurrentPage(pages.references)}
+            onClick={() => {
+              setCurrentPage(pages.references)
+              setIsMobileMenuOpen(false)
+            }}
           >
             References
           </button>

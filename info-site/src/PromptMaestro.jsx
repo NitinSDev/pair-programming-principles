@@ -69,19 +69,19 @@ function PromptMaestro() {
       <div className="playground-output">
         <h2>Feedback</h2>
         {error && (
-          <div style={{ color: 'red', padding: '10px', backgroundColor: '#ffe6e6', borderRadius: '4px' }}>
+          <div style={{ color: '#fca5a5', padding: '10px', backgroundColor: '#7f1d1d', border: '1px solid #991b1b', borderRadius: '4px' }}>
             <strong>Error:</strong> {error}
           </div>
         )}
         {analysis && (
-          <div style={{ padding: '10px' }}>
-            <div style={{ marginBottom: '15px' }}>
-              <strong>Overall Score:</strong> {analysis.overallScore}/10
+          <div style={{ padding: '10px', color: '#e5e7eb' }}>
+            <div style={{ marginBottom: '15px', color: '#f9fafb' }}>
+              <strong style={{ color: '#38bdf8' }}>Overall Score:</strong> <span style={{ color: '#7dd3fc' }}>{analysis.overallScore}/10</span>
             </div>
             
             <div style={{ marginBottom: '15px' }}>
-              <h3>Strengths:</h3>
-              <ul>
+              <h3 style={{ color: '#f9fafb', marginBottom: '0.5rem' }}>Strengths:</h3>
+              <ul style={{ color: '#e5e7eb' }}>
                 {analysis.strengths.map((strength, i) => (
                   <li key={i}>{strength}</li>
                 ))}
@@ -89,8 +89,8 @@ function PromptMaestro() {
             </div>
 
             <div style={{ marginBottom: '15px' }}>
-              <h3>Weaknesses:</h3>
-              <ul>
+              <h3 style={{ color: '#f9fafb', marginBottom: '0.5rem' }}>Weaknesses:</h3>
+              <ul style={{ color: '#e5e7eb' }}>
                 {analysis.weaknesses.map((weakness, i) => (
                   <li key={i}>{weakness}</li>
                 ))}
@@ -98,8 +98,8 @@ function PromptMaestro() {
             </div>
 
             <div style={{ marginBottom: '15px' }}>
-              <h3>Improvements:</h3>
-              <ul>
+              <h3 style={{ color: '#f9fafb', marginBottom: '0.5rem' }}>Improvements:</h3>
+              <ul style={{ color: '#e5e7eb' }}>
                 {analysis.improvements.map((improvement, i) => (
                   <li key={i}>{improvement}</li>
                 ))}
@@ -107,15 +107,15 @@ function PromptMaestro() {
             </div>
 
             <div style={{ marginBottom: '15px' }}>
-              <h3>Improved Prompt:</h3>
-              <p style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '4px', whiteSpace: 'pre-wrap' }}>
+              <h3 style={{ color: '#f9fafb', marginBottom: '0.5rem' }}>Improved Prompt:</h3>
+              <p style={{ backgroundColor: '#1a1a1a', border: '1px solid #2a2a2a', padding: '10px', borderRadius: '4px', whiteSpace: 'pre-wrap', color: '#f9fafb' }}>
                 {analysis.improvedPrompt}
               </p>
             </div>
           </div>
         )}
         {!analysis && !error && !loading && (
-          <p style={{ color: '#666' }}>Enter a prompt and click "Analyze Prompt" to get feedback</p>
+          <p style={{ color: '#9ca3af' }}>Enter a prompt and click "Analyze Prompt" to get feedback</p>
         )}
       </div>
     </div>
