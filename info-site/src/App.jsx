@@ -3,6 +3,7 @@ import './App.css'
 import HtmlJsPlayground from './HtmlJsPlayground.jsx'
 import PromptMaestro from './PromptMaestro.jsx'
 import devLogo from './assets/Dev.png'
+import myPhoto from './assets/myPhoto.jpeg'
 
 const pages = {
   home: 'home',
@@ -133,12 +134,58 @@ function AiUsageGrowthChart() {
   )
 }
 
+function AiAgentsChart() {
+  const data = [
+    { label: 'Yes, I use AI agents at work daily', value: 14.1 },
+    { label: 'Yes, I use AI agents at work weekly', value: 9 },
+    { label: 'Yes, I use AI agents at work monthly', value: 7.8 },
+    { label: 'No, but I plan to', value: 17.4 },
+    { label: 'No, I use AI exclusively in code', value: 13.8 },
+    { label: "No, and I don't plan to", value: 37.9 },
+  ]
+
+  const maxValue = Math.max(...data.map(d => d.value))
+  const width = 500
+  const barHeight = 32
+  const padding = 16
+
+  return (
+    <figure className="agents-chart" aria-label="AI agents usage survey">
+      <div className="agents-chart-header">
+        <div className="agents-chart-title">AI agents / All Respondents From Stack Overflow's 2025 Developer Survey</div>
+        <div className="agents-chart-subtitle">AI agents</div>
+      </div>
+      <div className="agents-chart-bars">
+        {data.map((item, idx) => (
+          <div key={idx} className="agents-chart-row">
+            <div className="agents-chart-label">{item.label}</div>
+            <div className="agents-chart-bar-container">
+              <div
+                className="agents-chart-bar"
+                style={{
+                  width: `${(item.value / maxValue) * 100}%`,
+                }}
+              />
+              <div className="agents-chart-value">{item.value}%</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="agents-chart-footer">
+        <div>Source: survey.stackoverflow.co/2025</div>
+        <div>Data licensed under Open Database License (ODbL)</div>
+      </div>
+    </figure>
+  )
+}
+
 function App() {
   const [currentPage, setCurrentPage] = useState(pages.home)
   const [isGuideOpen, setIsGuideOpen] = useState(false)
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [openUsesTier, setOpenUsesTier] = useState('tier1')
+  const [openLevel, setOpenLevel] = useState('level1')
   const guideRef = useRef(null)
   const toolsRef = useRef(null)
   const mobileMenuRef = useRef(null)
@@ -278,22 +325,25 @@ function App() {
     switch (currentPage) {
       case pages.playground:
         return (
-          <section className="page">
-            <h1>HTML &amp; JavaScript Playground</h1>
-            <p>
-              Experiment with basic HTML and JavaScript. Edit the code in the editors below, then
-              click <strong>Run</strong> to see the result.
-            </p>
+          <section className="page playground-page">
+            <div className="pg-hero">
+              <div className="pg-hero-inner">
+                <h1>HTML &amp; JavaScript Playground</h1>
+                <p>Experiment with basic HTML and JavaScript. Edit the code in the editors below, then click <strong>Run</strong> to see the result.</p>
+              </div>
+            </div>
             <HtmlJsPlayground />
           </section>
         )
       case pages.maestro:
         return (
-          <section className="page">
-            <h1>Prompt Maestro</h1>
-            <p>
-              Give the Maestro some coding prompts and let it give you feedback! Learn how to make your prompts clearer, more concise, and more effective.
-            </p>
+          <section className="page maestro-page">
+            <div className="m-hero">
+              <div className="m-hero-inner">
+                <h1>Prompt Maestro</h1>
+                <p>Give the Maestro some coding prompts and let it give you feedback! Learn how to make your prompts clearer, more concise, and more effective.</p>
+              </div>
+            </div>
             <PromptMaestro />
           </section>
         )
@@ -485,76 +535,418 @@ function App() {
         )
       case pages.gettingStarted:
         return (
-          <section className="page">
-            <h1>Getting Started</h1>
-            <p>
-              There are a ton of ways to integrate AI tools into your Workspace/IDE. There are three "levels" of integration, and your choice between them is completely up to you.
-            </p>
-            
-            <h2>Level 1: Chat app/browser tab</h2>
-            <p>
-              Many LLMs and GenAI tools are available for developers, and many of them reside in their own web domains or applications.
-            </p>
+          <section className="page getting-started-page">
+            <div className="gs-hero">
+              <div className="gs-hero-inner">
+                <h1>Getting Started</h1>
+                <p>
+                  There are a ton of ways to integrate AI tools into your Workspace/IDE. There are three "levels" of integration, and your choice between them is completely up to you.
+                </p>
+              </div>
+            </div>
+
+            <div className="gs-accordion" aria-label="AI integration levels">
+              <div className={openLevel === 'level1' ? 'gs-level open' : 'gs-level'}>
+                <button
+                  type="button"
+                  className="gs-level-header"
+                  aria-expanded={openLevel === 'level1'}
+                  onClick={() => setOpenLevel((l) => (l === 'level1' ? '' : 'level1'))}
+                >
+                  <div className="gs-level-title">Level 1: Chat app/browser tab</div>
+                  <div className="gs-level-chevron" aria-hidden="true">
+                    ▾
+                  </div>
+                </button>
+                <div className="gs-level-body">
+                  <p>
+                    Many LLMs and GenAI tools are available for developers, and many of them reside in their own web domains or applications.
+                  </p>
+                  <ul>
+                    <li>Some examples of these are <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer">chatgpt.com</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">claude.ai</a>, <a href="https://replit.com" target="_blank" rel="noopener noreferrer">repl.it</a>*, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">gemini.google.com</a>, etc.</li>
+                    <li>*<a href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a> is also a web-based IDE on its own, but its chatbot is reliable for programming questions and understanding.</li>
+                    <li>Usually best for quick and simple tasks where you can copy and paste code snippets from the browser into the IDE.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className={openLevel === 'level2' ? 'gs-level open' : 'gs-level'}>
+                <button
+                  type="button"
+                  className="gs-level-header"
+                  aria-expanded={openLevel === 'level2'}
+                  onClick={() => setOpenLevel((l) => (l === 'level2' ? '' : 'level2'))}
+                >
+                  <div className="gs-level-title">Level 2: IDE Plugins/Extensions</div>
+                  <div className="gs-level-chevron" aria-hidden="true">
+                    ▾
+                  </div>
+                </button>
+                <div className="gs-level-body">
+                  <p>
+                    Most modern development environments have built-in or installable tools that implement popular AI tools like <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude Haiku</a>, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a>, and more. These extensions often let you choose what models to use as well, with some being free and some being subscription-based.
+                  </p>
+                  <ul>
+                    <li>Let you code in a familiar IDE while having a sidebar for AI assistance, and integrate seamlessly with development.</li>
+                    <li><a href="https://visualstudio.microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft's Visual Studio</a> is one of the most modular and customizable development platforms for integrating AI tools.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className={openLevel === 'level3' ? 'gs-level open' : 'gs-level'}>
+                <button
+                  type="button"
+                  className="gs-level-header"
+                  aria-expanded={openLevel === 'level3'}
+                  onClick={() => setOpenLevel((l) => (l === 'level3' ? '' : 'level3'))}
+                >
+                  <div className="gs-level-title">Level 3: Dedicated Development Application</div>
+                  <div className="gs-level-chevron" aria-hidden="true">
+                    ▾
+                  </div>
+                </button>
+                <div className="gs-level-body">
+                  <p>
+                    Some high-power AI programming tools/agents provide their own IDEs for users to program in with complete integration.
+                  </p>
+                  <ul>
+                    <li>The leading example of this is <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer">Cursor</a>, which is a fork of VS Code with deeply embedded AI functionality.</li>
+                    <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude code</a>'s desktop environment, <a href="https://www.cognition-labs.com/devin" target="_blank" rel="noopener noreferrer">Devin</a>, and <a href="https://windsurf.ai" target="_blank" rel="noopener noreferrer">Windsurf by Codeium</a> are also examples of AI integration at this level.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <h1>What are <b>agents</b>?</h1>
+            <p>You may have heard the term <b>agents</b> being used to describe certain AI tools, but what exactly does that mean?</p>
             <ul>
-              <li>Some examples of these are <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer">chatgpt.com</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">claude.ai</a>, <a href="https://replit.com" target="_blank" rel="noopener noreferrer">repl.it</a>*, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">gemini.google.com</a>, etc.</li>
-              <li>*<a href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a> is also a web-based IDE on its own, but its chatbot is reliable for programming questions and understanding.</li>
-              <li>Usually best for quick and simple tasks where you can copy and paste code snippets from the browser into the IDE.</li>
+              <li>An agent, or agentic AI, is an almost completely autonomous, goal-driven system that plans and executes multi-step tasks. They don't just respond to a single prompt.</li>
+              <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude Code's CLI agent</a>, <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot's Workspace</a> features, <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer">Cursor</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude code</a>'s desktop environment, and <a href="https://www.cognition-labs.com/devin" target="_blank" rel="noopener noreferrer">Devin</a> (Many level 3 examples) all fall under this category, although they are not exclusively agents (they also have response-based versions/modes).</li>
+              <li>Agentic AI isn't mainstream yet, and while it is much more autonomous, performing higher level thinking (great for both <button className="inline-link" onClick={() => setCurrentPage(pages.uses)}>Level 1 and 2 use cases</button>), still be extra cautious with Level 3 uses, and <b>stay involved and informed</b> with every step the agent takes.</li>
             </ul>
 
-            <h2>Level 2: IDE Plugins/Extensions</h2>
-            <p>
-              Most modern development environments have built-in or installable tools that implement popular AI tools like <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot</a>, <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude Haiku</a>, <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a>, and more. These extensions often let you choose what models to use as well, with some being free and some being subscription-based.
-            </p>
-            <ul>
-              <li>Let you code in a familiar IDE while having a sidebar for AI assistance, and integrate seamlessly with development.</li>
-              <li><a href="https://visualstudio.microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft's Visual Studio</a> is one of the most modular and customizable development platforms for integrating AI tools.</li>
-            </ul>
-
-            <h2>Level 3: Dedicated Development Application</h2>
-            <p>
-              Some high-power AI programming tools/agents provide their own IDEs for users to program in with complete integration.
-            </p>
-            <ul>
-              <li>The leading example of this is <a href="https://cursor.sh" target="_blank" rel="noopener noreferrer">Cursor</a>, which is a fork of VS Code with deeply embedded AI functionality.</li>
-              <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude code</a>'s desktop environment, <a href="https://www.cognition-labs.com/devin" target="_blank" rel="noopener noreferrer">Devin</a>, and <a href="https://windsurf.ai" target="_blank" rel="noopener noreferrer">Windsurf by Codeium</a> are also examples of AI integration at this level.</li>
-            </ul>
+            <AiAgentsChart />
           </section>
         )
       case pages.dosAndDonts:
         return (
-          <section className="page">
-            <h1>Dos &amp; Don'ts</h1>
-            <p>
-              This page will contain best practices and common pitfalls when using AI coding tools.
-            </p>
+          <section className="page dos-donts-page">
+            <div className="dd-hero">
+              <div className="dd-hero-inner">
+                <h1>Dos &amp; Don'ts</h1>
+                <p>Best practices for developers working alongside AI. Compiled from peer-reviewed research.</p>
+              </div>
+            </div>
+
+            <div className="dd-grid">
+              <div className="dd-section do-section">
+                <div className="dd-header">
+                  <div className="dd-icon">✓</div>
+                  <h2>DO</h2>
+                </div>
+                <div className="dd-items">
+                  <div className="dd-item">
+                    <h3>Always review AI-generated code before merging</h3>
+                    <p>Around 27% of AI-generated code contains security weaknesses, and over half of those contain more than one issue. Never treat generated code as production-ready without a security and logic review.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Use static analysis tools alongside AI</h3>
+                    <p>Tools like CodeQL, Bandit, and ESLint should be run on every AI-generated snippet before it enters your codebase. Combining these tools with AI chat assistants to fix flagged issues raised AI's self-correction rate from 19% to over 55%.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Write detailed, specific prompts</h3>
+                    <p>Prompt engineering dramatically affects output quality. Use delimiters, specify output format, provide context, and give the model examples of what you want. Vague prompts produce vague (and often insecure) code.</p>
+                    <div className="dd-source">DeepLearning.AI Prompt Engineering</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Use AI for repetitive and low-complexity tasks</h3>
+                    <p>AI excels at generating boilerplate, templates, prototypes, and repetitive scripts. Offloading these tasks to AI frees developers to focus on complex architecture and logic that AI still struggles with.</p>
+                    <div className="dd-source">Shekhar (2024)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Maintain a human in the loop at all times</h3>
+                    <p>In every tested scenario, AI models required continuous human prompting and revision to produce correct, maintainable code. Even highly capable models failed test cases without expert oversight.</p>
+                    <div className="dd-source">Tosi (2024); Idrisov &amp; Schlippe (2024)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Treat AI as a starting point, not a final answer</h3>
+                    <p>AI-generated code is best understood as a strong first draft. Developers should refine, validate, and test it rigorously. The goal is a collaboration, not a handoff.</p>
+                    <div className="dd-source">Sauvola et al. (2024)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Provide warning messages when asking AI to fix its own bugs</h3>
+                    <p>When using AI chat to fix security issues, paste the actual error or warning message from your static analysis tool directly into the prompt. This context dramatically improves fix success rates.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Stay aware of which vulnerability categories AI struggles with most</h3>
+                    <p>Injection flaws (OS command injection, code injection, SQL injection, XSS) are among the most frequent and hardest for AI to self-correct. Give extra scrutiny to any AI code that handles user input or external commands.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="dd-section dont-section">
+                <div className="dd-header">
+                  <div className="dd-icon">✕</div>
+                  <h2>DON'T</h2>
+                </div>
+                <div className="dd-items">
+                  <div className="dd-item">
+                    <h3>Blindly accept AI code suggestions</h3>
+                    <p>GitHub Copilot's code completion acceptance rate sits around 30%, and for good reason — the rest gets discarded after review. Accepting suggestions without evaluation is one of the fastest ways to introduce vulnerabilities.</p>
+                    <div className="dd-source">Stack Overflow Developer Survey (2025)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Rely on AI for complex security-critical logic</h3>
+                    <p>AI consistently struggles with OS command injection and code injection — two of the most dangerous vulnerability categories. Copilot Chat was unable to fix command injection flaws even with detailed prompts.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Use AI to generate entire production codebases without oversight</h3>
+                    <p>Fully autonomous AI development (where humans are out of the loop) is a high-risk scenario. Research consistently shows that even the most capable models need expert revision to produce reliable, secure, and maintainable software.</p>
+                    <div className="dd-source">Sauvola et al. (2024)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Ignore the risk of hallucinations</h3>
+                    <p>AI models can confidently generate calls to non-existent APIs, fabricate library names, or produce fake credentials. Always verify that imported libraries, API calls, and external references actually exist.</p>
+                    <div className="dd-source">DeepLearning.AI Prompt Engineering</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Share sensitive or proprietary code with AI tools</h3>
+                    <p>Pasting confidential business logic, API keys, or customer data into AI tools poses serious data privacy risks. Many corporate environments restrict or monitor what code can be submitted to external AI services.</p>
+                    <div className="dd-source">Tosi (2024); Sauvola et al. (2024)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Use AI-generated randomness or cryptography without verification</h3>
+                    <p>Use of insufficiently random values was the single most common flaw found, accounting for over 18% of all vulnerabilities. Never trust AI-generated cryptographic or randomness logic without manual review.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Skip testing AI-generated code</h3>
+                    <p>Models that solved 100% of test problems still failed individual edge cases. In one study, even with continuous human prompting, generated code still failed 1-2 test cases per problem. Automated testing is non-negotiable.</p>
+                    <div className="dd-source">Tosi (2024); Idrisov &amp; Schlippe (2024)</div>
+                  </div>
+                  <div className="dd-item">
+                    <h3>Assume AI-generated code matches human security standards</h3>
+                    <p>While some studies suggest AI introduces vulnerabilities at a rate comparable to humans, AI is a tool meant to elevate development — not match the floor. It must be held to a higher standard because its adoption scale multiplies any flaws it produces.</p>
+                    <div className="dd-source">Fu et al. (2025)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
         )
       case pages.whatsNext:
         return (
-          <section className="page">
-            <h1>What's Next?</h1>
-            <p>
-              This page will discuss future developments and next steps for AI programming tools.
-            </p>
+          <section className="page whats-next-page">
+            <div className="wn-hero">
+              <div className="wn-hero-inner">
+                <h1>What's Next?</h1>
+                <p>Moving beyond Tier 1 and Level 1: what to expect as AI tools become more autonomous.</p>
+              </div>
+            </div>
+
+            <div className="wn-intro">
+              <p>
+                You've learned how to use AI safely at Tier 1/2 and in Level 1/2 environments. But the technology landscape is moving toward more autonomous capabilities. Here's what's emerging, what risks come with it, and how to prepare.
+              </p>
+            </div>
+
+            <div className="wn-topics">
+              <div className="wn-topic">
+                <div className="wn-topic-header">
+                  <h2>The Rise of Agentic AI (Tier 3 Territory)</h2>
+                </div>
+                <div className="wn-topic-content">
+                  <p>
+                    Tools like Claude's code analysis, Cursor's AI agents, and specialized coding agents can now:
+                  </p>
+                  <ul className="wn-skills">
+                    <li>Take a high-level goal and autonomously plan multi-step solutions</li>
+                    <li>Write code across multiple files without human review of each step</li>
+                    <li>Run tests and iterate on failures independently</li>
+                    <li>Make architectural decisions with limited human guidance</li>
+                  </ul>
+                  <p>
+                    This is fundamentally different from pair programming. It's delegation—more like tasking a junior developer than asking an autocomplete for suggestions. But just like assigning work to junior developers, it requires oversight.
+                  </p>
+                </div>
+              </div>
+
+              <div className="wn-topic">
+                <div className="wn-topic-header">
+                  <h2>Why Tier 3 Matters: Security at Scale</h2>
+                </div>
+                <div className="wn-topic-content">
+                  <p>
+                    Here's the problem: autonomous AI doesn't just write faster—it makes mistakes faster. Single-turn AI tools already struggle with:
+                  </p>
+                  <ul className="wn-skills">
+                    <li>Insufficient randomness in security-critical code (password hashing, token generation)</li>
+                    <li>Vulnerability patterns (SQL injection, code injection, hard-coded secrets)</li>
+                    <li>Hallucinated APIs and deprecated dependencies</li>
+                    <li>Logic errors that pass surface-level testing</li>
+                  </ul>
+                  <p>
+                    An autonomous agent amplifies these risks across an entire codebase without a human checkpoint. The difference between a single vulnerable component and a compromised production system becomes a matter of speed, not prevention.
+                  </p>
+                </div>
+              </div>
+
+              <div className="wn-topic">
+                <div className="wn-topic-header">
+                  <h2>Level 3 Integration: What's Actually Coming</h2>
+                </div>
+                <div className="wn-topic-content">
+                  <p>
+                    Level 3 tools—dedicated development environments with deep AI integration (Cursor, Devin, Claude Code, Windsurf)—are already pushing boundaries. As these mature, expect:
+                  </p>
+                  <ul className="wn-skills">
+                    <li><strong>Higher autonomy by default:</strong> The ability to delegate entire features or subsystems</li>
+                    <li><strong>Deeper code context:</strong> AI that understands your entire project structure and patterns</li>
+                    <li><strong>Autonomous iteration:</strong> Tests run, feedback loops happen, fixes apply—all without your direct input</li>
+                    <li><strong>Pressure to trust:</strong> As these tools become better and faster, the friction cost of reviewing every output increases</li>
+                  </ul>
+                  <p>
+                    The temptation will be to let it run unsupervised. The smart move is to stay in control.
+                  </p>
+                </div>
+              </div>
+
+              <div className="wn-topic">
+                <div className="wn-topic-header">
+                  <h2>Skills That Matter Going Forward</h2>
+                </div>
+                <div className="wn-topic-content">
+                  <p>
+                    As AI handles more implementation, the premium skills shift:
+                  </p>
+                  <ul className="wn-skills">
+                    <li><strong>Security auditing:</strong> Understanding why code is vulnerable—not just that it is</li>
+                    <li><strong>System design:</strong> Architectural decisions AI can't or shouldn't make alone</li>
+                    <li><strong>Prompt clarity:</strong> Communicating precise requirements to autonomous systems</li>
+                    <li><strong>Code comprehension:</strong> Knowing what your AI generated and why it matters</li>
+                  </ul>
+                  <p>
+                    Developers who understand the "why" behind code gain competitive advantage over those who accept whatever the model produces.
+                  </p>
+                </div>
+              </div>
+
+              <div className="wn-topic">
+                <div className="wn-topic-header">
+                  <h2>The Unresolved Questions</h2>
+                </div>
+                <div className="wn-topic-content">
+                  <p>
+                    As AI autonomy increases, so do the stakes:
+                  </p>
+                  <ul className="wn-questions">
+                    <li>Who's responsible if an AI agent ships a security vulnerability?</li>
+                    <li>What happens to junior developers if AI handles all entry-level work?</li>
+                    <li>How do teams maintain code quality when AI works faster than human review?</li>
+                    <li>How much autonomy should agents actually have in production systems?</li>
+                  </ul>
+                  <p>
+                    These aren't theoretical. Companies are making these decisions right now. The industry hasn't settled on answers yet, which means you have time to decide your own threshold for AI autonomy.
+                  </p>
+                </div>
+              </div>
+
+              <div className="wn-topic wn-final">
+                <div className="wn-topic-header">
+                  <h2>Your Path Forward</h2>
+                </div>
+                <div className="wn-topic-content">
+                  <p>
+                    The middle ground—where most of development will happen—is human oversight plus AI acceleration:
+                  </p>
+                  <ul className="wn-skills">
+                    <li>Start with Tier 1 tasks (prototyping, debugging, basic frontend) until you're confident</li>
+                    <li>Move to Tier 2 with caution (always review, always verify, always understand)</li>
+                    <li>Approach Tier 3 and Level 3 with extreme care—set clear boundaries for autonomy</li>
+                    <li>Always keep humans in the loop for security-critical code and business logic</li>
+                  </ul>
+                  <p className="wn-highlight wn-highlight-final">
+                    AI is an accelerant, not a replacement. The developers who thrive won't be those who trust AI most—they'll be those who use AI most effectively while maintaining control and understanding of what they build.
+                  </p>
+                </div>
+              </div>
+            </div>
           </section>
         )
       case pages.about:
         return (
-          <section className="page">
-            <h1>About</h1>
-            <p>
-              My name is Nitin Sathish, and I created Dev X AI because I noticed one problem holding countless developers back: the fear of AI. The computer science industry is shrinking in many ways, and people are quick to blame it on AI. What they fail to realize is that while AI can be a huge risk to developers who don't know how to use it, it can also be an invaluable tool to those who can balance it and master it. This webpage serves as a tool to get more developers acquainted with the benefits AI programming provides, and how they can use it safely and securely.
-            </p>
+          <section className="page about-page">
+            <div className="about-hero">
+              <div className="about-hero-inner">
+                <h1>About Me</h1>
+                <p>Learn more about who I am and why I created Dev × AI.</p>
+              </div>
+            </div>
+
+            <div className="about-content">
+              <div className="about-image-section">
+                <img src={myPhoto} alt="My Picture" />
+              </div>
+              
+              <div className="about-text-section">
+                <h2>Nitin Sathish</h2>
+                <p>
+                  I created Dev × AI because I noticed one problem holding countless developers back: the fear of AI. The computer science industry is changing in many ways, and people are quick to blame it on AI. What developers fail to realize is that while AI can be a huge risk to those who don't know how to use it, it can also be an invaluable tool to those who can balance it and master it.
+                </p>
+                <p>
+                  This webpage serves as a tool to get more developers acquainted with the benefits AI programming provides, and how they can use it safely and securely. My goal is to demystify AI-assisted development and help you become confident, capable, and secure in your use of these powerful tools.
+                </p>
+              </div>
+            </div>
           </section>
         )
       case pages.references:
         return (
-          <section className="page">
-            <h1>References</h1>
-            <p>
-              List helpful resources, links, or citations here. This could include articles, books,
-              documentation pages, or any sources you want visitors to explore.
-            </p>
+          <section className="page references-page">
+            <div className="ref-hero">
+              <div className="ref-hero-inner">
+                <h1>References</h1>
+                <p>Works cited and reference materials for this project.</p>
+              </div>
+            </div>
+
+            <div className="ref-content">
+              <h2>Citations</h2>
+              <div className="citations-list">
+                <div className="citation">
+                  Bante, N., Mahure, U., Helonde, P., Yete, R., & Aakre, A. (2025). Agentic AI systems for software development automation. <em>International Journal of Scientific Research & Engineering Trends, 11</em>(4). https://ijsret.com/wp-content/uploads/IJSRET_V11_issue4_167.pdf
+                </div>
+
+                <div className="citation">
+                  Federal Reserve Bank of New York. (2025, February 20). <em>The labor market for recent college graduates.</em> Www.newyorkfed.org. https://www.newyorkfed.org/research/college-labor-market#--explore:outcomes-by-major
+                </div>
+
+                <div className="citation">
+                  Fu, Y., Liang, P., Tahir, A., Li, Z., Shahin, M., Yu, J., & Chen, J. (2025). Security weaknesses of copilot-generated code in GitHub projects: An empirical study. <em>ACM Transactions on Software Engineering and Methodology, 34</em>(8). ACM Digital Library. https://doi.org/10.1145/3716848
+                </div>
+
+                <div className="citation">
+                  Gaurav Shekhar. (2024). The impact of AI and automation on software development: A deep dive. <em>ESP International Journal of Advancements in Computational Technology (ESP-IJACT), 2</em>(1), 162–174. https://www.espjournals.org/IJACT/ijact-v21ip117
+                </div>
+
+                <div className="citation">
+                  Harding, W. (2025). <em>AI copilot code quality.</em> GitClear. https://gitclear-public.s3.us-west-2.amazonaws.com/GitClear-AI-Copilot-Code-Quality-2025.pdf
+                </div>
+
+                <div className="citation">
+                  Sauvola, J., Tarkoma, S., Klemettinen, M., Riekki, J., & Doermann, D. (2024). Future of software development with generative AI. <em>Automated Software Engineering, 31</em>(1). https://doi.org/10.1007/s10515-024-00426-z
+                </div>
+
+                <div className="citation">
+                  Tosi, D. (2024). Studying the Quality of Source Code Generated by Different AI Generative Engines: An Empirical Evaluation. <em>Future Internet, 16</em>(6), 188. https://doi.org/10.3390/fi16060188
+                </div>
+              </div>
+            </div>
           </section>
         )
       case pages.home:
@@ -570,8 +962,7 @@ function App() {
             >
               <div className="landing-hero-inner">
                 <div className="landing-hero-copy">
-                  <div className="landing-eyebrow">Dev × AI</div>
-                  <h1>Program with AI—confidently.</h1>
+                  <h1><span className="landing-eyebrow">Dev × AI</span><br />Program with AI—confidently.</h1>
                   <p className="landing-lead">
                     Learn how to use AI tools safely, securely, and efficiently in your development workflow.
                   </p>
